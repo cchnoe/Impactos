@@ -17,3 +17,5 @@ env_impactos/
 __pycache__/
 *.pyc
 
+# Ignorar credenciales aws 
+libs/params/aws_tokens.json
