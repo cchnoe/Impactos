@@ -18,6 +18,7 @@ raw_txt/
 
 # Ignorar directorios de dependencias de Python
 __pycache__/
+*/__pycache__/
 *.pyc
 
 # Ignorar credenciales aws 
