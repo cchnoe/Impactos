@@ -1,0 +1,19 @@
+# Ignorar archivos de log
+*.log
+
+# Ignorar archivos de sistema de MacOS
+.DS_Store
+
+# Ignorar directorios de node_modules
+env_impactos/
+
+# Ignorar archivos compilados de Java
+*.class
+
+# Ignorar archivos de configuración de entorno
+.env
+
+# Ignorar directorios de dependencias de Python
+__pycache__/
+*.pyc
+

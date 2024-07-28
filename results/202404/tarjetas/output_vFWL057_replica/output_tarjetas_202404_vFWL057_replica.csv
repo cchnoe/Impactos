@@ -1,0 +1,10 @@
+cartera,periodo,version,parametro,
+tarjetas,202404,fwl057_replica,registro_ejec,s41800
+tarjetas,202404,fwl057_replica,tablas actualizadas,tbl_bucket_pd - tbl_bucket_limites - tbl_matriz_anual - tbl_matriz_mensual - tbl_stress_pd
+tarjetas,202404,fwl057_replica,umbrales actualizados,0.053 - 0.642
+tarjetas,202404,fwl057_replica,ruta_output,s3://interbank-datalake-us-east-1-428938305480-discovery/ifrs/discovery/discovery_riesgos_calibracion/Calibracion-2024/Impactos/s41800/resultados_he/202404/carteras/tarjetas/output_vfwl057_replica
+tarjetas,202404,fwl057_replica,pesos fwl,"{'base': 0.58, 'optimista': 0.07, 'pesimista': 0.35}"
+tarjetas,202404,fwl057_replica,Tablas inputs,"{'tbl_newscore': 'hoa_67_new_score_v1_202404', 'tbl_new_primer_score': 'hoa_66_tr_score_inicial_v1_202404', 'tbl_bucket_pd': 'hoa_tabla_pd_bucket_v2_202404', 'tbl_lgd': 'hoa_tabla_lgd_v4', 'tbl_ccf': 'hoa_tabla_ccf_v2', 'tbl_bucket_limites': 'hoa_limites_buckets_v1_202404', 'tbl_matriz_anual': 'hoa_matriz_anual_tc_v2_202404', 'tbl_matriz_mensual': 'hoa_matriz_mensual_tc_v2_202404', 'tbl_stress_pd': 'hoa_fwl_ibk_v057_202404'}"
+tarjetas,202404,fwl057_replica,Actualizacion de tablas,"{'tbl_newscore': 0, 'tbl_new_primer_score': 0, 'tbl_bucket_pd': 1, 'tbl_lgd': 0, 'tbl_ccf': 0, 'tbl_bucket_limites': 1, 'tbl_matriz_anual': 1, 'tbl_matriz_mensual': 1, 'tbl_stress_pd': 1}"
+tarjetas,202404,fwl057_replica,JSON,JSON_TARJETAS_202404_vFWL057_replica.json
+tarjetas,202404,fwl057_replica,"Fecha, hora y tiempo de ejecucion",03-06-2024 05:12 PM ::: [ 1 h 22 min 31 seg]

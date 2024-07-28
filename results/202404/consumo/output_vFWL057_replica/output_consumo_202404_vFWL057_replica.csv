@@ -1,0 +1,10 @@
+cartera,periodo,version,parametro,
+consumo,202404,fwl057_replica,registro_ejec,s41800
+consumo,202404,fwl057_replica,tablas actualizadas,tbl_bucket_pd - tbl_bucket_limites - tbl_stress_pd
+consumo,202404,fwl057_replica,umbrales actualizados,0.052 - 0.79
+consumo,202404,fwl057_replica,ruta_output,s3://interbank-datalake-us-east-1-428938305480-discovery/ifrs/discovery/discovery_riesgos_calibracion/Calibracion-2024/Impactos/s41800/resultados_he/202404/carteras/consumo/output_vfwl057_replica
+consumo,202404,fwl057_replica,pesos fwl,"{'base': 0.58, 'optimista': 0.07, 'pesimista': 0.35}"
+consumo,202404,fwl057_replica,Tablas inputs,"{'tbl_newscore': 'hoa_67_new_score_v1_con_202404', 'tbl_new_primer_score': 'hoa_66_tr_score_inicial_v1_con_202404', 'tbl_bucket_pd': 'hoa_tabla_pd_bucket_v2_202404', 'tbl_lgd': 'hoa_tabla_lgd_v4', 'tbl_ccf': 'hoa_tabla_ccf_v2', 'tbl_bucket_limites': 'hoa_limites_buckets_v1_202404', 'tbl_stress_pd': 'hoa_fwl_ibk_v057_202404'}"
+consumo,202404,fwl057_replica,Actualizacion de tablas,"{'tbl_newscore': 0, 'tbl_new_primer_score': 0, 'tbl_bucket_pd': 1, 'tbl_lgd': 0, 'tbl_ccf': 0, 'tbl_bucket_limites': 1, 'tbl_stress_pd': 1}"
+consumo,202404,fwl057_replica,JSON,JSON_CONSUMO_202404_vFWL057_replica.json
+consumo,202404,fwl057_replica,"Fecha, hora y tiempo de ejecucion",03-06-2024 05:38 PM ::: [20 min 35 seg]

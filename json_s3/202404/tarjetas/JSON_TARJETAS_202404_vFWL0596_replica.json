@@ -1,0 +1,1188 @@
+{
+    "ruta_codigo": "s3://aws-scripts-195034049652-us-east-1/da/cicd/framework3/Scripts/app_ifrs_cloud_on_premise.py",
+    "confPython": {
+        "host": "https://172.17.246.48/v1",
+        "region": {
+            "id_region": "us-east-1",
+            "nombre_region": "US East (N. Virginia)"
+        },
+        "idGateway": "12mfnf1oh1",
+        "llaveApi": "7f9b7433-23d5-4d03-b3c8-2e3c155f2f29",
+        "folderS3": "s3://interbank-datalake-us-east-1-428938305480-discovery/ifrs/discovery/discovery_riesgos_calibracion/Calibracion-2024/Impactos/s41800/athena_results/",
+        "folderS3bd": "s3://interbank-datalake-prod-us-east-1-195034049652-stage/pre-stage/ifrs/discovery/",
+        "folderS3Destino": "s3://interbank-datalake-us-east-1-428938305480-discovery/ifrs/discovery/discovery_riesgos_calibracion/Calibracion-2024/Impactos/s41800/resultados_he/202404/carteras/tarjetas/output_vFWL0596_replica/",
+        "bd": "e_ifrs_discovery",
+        "tablaAvance": "sdlf-ifrs-AvanceEjecucion-prd-table",
+        "certificado": "api.ifrs.prd.interbank.per.cer",
+        "tiempo_limite": "05:00",
+        "tiempo_limite_segundos": null
+    },
+    "flag_minorista": 1,
+    "flag_mayorista": 0,
+    "metodologia_PD": 1,
+    "metodologia_LGD": 4,
+    "metodologia_EAD": 4,
+    "vars_staging_adicionales": [],
+    "vars_agrupacion_adicionales": [
+        {
+            "nombre_resultado_join": "N_motivobloqueo",
+            "tabla_join": "Tbl_bloqueotc",
+            "campo_llave_join": "concatenado",
+            "campo_llave_base": "T_concatenado",
+            "campo_resultado_join": "TIPMOTIVOBLOQUEO"
+        },
+        {
+            "nombre_resultado_join": "T_programa",
+            "tabla_join": "Tbl_reactiva",
+            "campo_llave_join": "CONCATENADO",
+            "campo_llave_base": "T_concatenado",
+            "campo_resultado_join": "PROGRAMA"
+        },
+        {
+            "nombre_resultado_join": "N_cobertura",
+            "tabla_join": "Tbl_reactiva",
+            "campo_llave_join": "CONCATENADO",
+            "campo_llave_base": "T_concatenado",
+            "campo_resultado_join": "COBERTURA"
+        }
+    ],
+    "bloques": [
+        {
+            "nombre_variable_motor": "Tbl_newscore",
+            "nombre_bloque": "V_68_NEW_SCORE_V02",
+            "filtro": " SEGMENTO_IFRS = 'TARJETAS'  or SEGMENTO_IFRS = 'TARJETA'",
+            "keep_campos": [
+                "CODMES",
+                "CODUNICOCLI",
+                "SCORE",
+                "SEGMENTO"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_score_codmes",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_score_id_clie",
+                    "nombre_campo": "CODUNICOCLI",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_score_score",
+                    "nombre_campo": "SCORE",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_score_segmento",
+                    "nombre_campo": "SEGMENTO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_68_NEW_SCORE_V02_V1",
+            "campos_string": "SEGMENTO_IFRS*CODUNICOCLI*SEGMENTO",
+            "campos_ancho": "8*10*12",
+            "cont_campos_string": 3,
+            "listaCargas": "7673"
+        },
+        {
+            "nombre_variable_motor": "Tbl_new_primer_score",
+            "nombre_bloque": "V_69_TR_SCORE_INICIAL_V02",
+            "filtro": " FUENTE = 'TARJETAS_PRIMER_SCORE'",
+            "keep_campos": [
+                "CODMES",
+                "CONCATENADO",
+                "CODUNICOCLI",
+                "SEGMENTO",
+                "SCORE"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_primer_score_codmes",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_primer_score_concatenado",
+                    "nombre_campo": "CONCATENADO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_primer_score_id_clie",
+                    "nombre_campo": "CODUNICOCLI",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_primer_score_segmento",
+                    "nombre_campo": "SEGMENTO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_primer_score_score",
+                    "nombre_campo": "SCORE",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_69_TR_SCORE_INICIAL_V02_V1",
+            "campos_string": "FUENTE*CONCATENADO*CODUNICOCLI*SEGMENTO",
+            "campos_ancho": "21*20*10*12",
+            "cont_campos_string": 4,
+            "listaCargas": "7687"
+        },
+        {
+            "nombre_variable_motor": "Tbl_repro",
+            "nombre_bloque": "V_55_REPROGRAMADOS_BP",
+            "filtro": " SEGMENTO_IFRS = 'TARJETA'  and FLG_UNCHECK = 1",
+            "keep_campos": [
+                "CODMES",
+                "CONCATENADO",
+                "MARCA_REPRO"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_repro_codmes",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_repro_concatenado",
+                    "nombre_campo": "CONCATENADO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_repro_marca",
+                    "nombre_campo": "MARCA_REPRO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_55_REPROGRAMADOS_BP_V1",
+            "campos_string": "CONCATENADO*MARCA_REPRO*SEGMENTO_IFRS",
+            "campos_ancho": "20*13*11",
+            "cont_campos_string": 3,
+            "listaCargas": "7636"
+        },
+        {
+            "nombre_variable_motor": "Tbl_bloqueotc",
+            "nombre_bloque": "V_BLOQUEOS_TC",
+            "filtro": "",
+            "keep_campos": [
+                "codmes",
+                "concatenado",
+                "TIPMOTIVOBLOQUEO"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_bloqueotc_codmes",
+                    "nombre_campo": "codmes",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_bloqueotc_concatenado",
+                    "nombre_campo": "concatenado",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_bloqueotc_motivo",
+                    "nombre_campo": "TIPMOTIVOBLOQUEO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_BLOQUEOS_TC_V1",
+            "campos_string": "concatenado*TIPMOTIVOBLOQUEO",
+            "campos_ancho": "20*2",
+            "cont_campos_string": 2,
+            "listaCargas": "7668"
+        },
+        {
+            "nombre_variable_motor": "Tbl_bucket_pd",
+            "nombre_bloque": "V_TABLA_PD_BUCKET",
+            "filtro": "",
+            "keep_campos": [
+                "cartera",
+                "segmento",
+                "bucket_score",
+                "valor_PD"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_bucket_pd_cartera",
+                    "nombre_campo": "cartera",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_bucket_pd_segmento",
+                    "nombre_campo": "segmento",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_bucket_pd_bucket",
+                    "nombre_campo": "bucket_score",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_bucket_pd_valor_PD",
+                    "nombre_campo": "valor_PD",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_TABLA_PD_BUCKET_V1",
+            "campos_string": "cartera*segmento",
+            "campos_ancho": "13*25",
+            "cont_campos_string": 2,
+            "listaCargas": "6738"
+        },
+        {
+            "nombre_variable_motor": "Tbl_lgd",
+            "nombre_bloque": "V_TABLA_LGD",
+            "filtro": "",
+            "keep_campos": [
+                "cartera",
+                "segmento",
+                "valor_LGD"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_lgd_cartera",
+                    "nombre_campo": "cartera",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_lgd_segmento",
+                    "nombre_campo": "segmento",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_lgd_valor_lgd",
+                    "nombre_campo": "valor_LGD",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_TABLA_LGD_V1",
+            "campos_string": "cartera*segmento",
+            "campos_ancho": "13*25",
+            "cont_campos_string": 2,
+            "listaCargas": "6727"
+        },
+        {
+            "nombre_variable_motor": "Tbl_ccf",
+            "nombre_bloque": "V_TABLA_CCF",
+            "filtro": "",
+            "keep_campos": [
+                "cartera",
+                "segmento",
+                "valor_CCF"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_ccf_cartera",
+                    "nombre_campo": "cartera",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_ccf_segmento",
+                    "nombre_campo": "segmento",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_ccf_valor_ccf",
+                    "nombre_campo": "valor_CCF",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_TABLA_CCF_V1",
+            "campos_string": "cartera*segmento",
+            "campos_ancho": "13*25",
+            "cont_campos_string": 2,
+            "listaCargas": "6737"
+        },
+        {
+            "nombre_variable_motor": "Tbl_adicionales",
+            "nombre_bloque": null,
+            "filtro": null,
+            "keep_campos": null,
+            "campos": [
+                {
+                    "nombre_variable_motor": "N_prepago_prob",
+                    "nombre_campo": null,
+                    "tipo_campo": 4,
+                    "valor_motor": "0.0"
+                },
+                {
+                    "nombre_variable_motor": "N_prepago_ratio",
+                    "nombre_campo": null,
+                    "tipo_campo": 4,
+                    "valor_motor": "0.0"
+                },
+                {
+                    "nombre_variable_motor": "N_factor_cambio_estres",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "1"
+                },
+                {
+                    "nombre_variable_motor": "N_plazo_max_vida",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "0"
+                },
+                {
+                    "nombre_variable_motor": "N_bucket_default",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "12"
+                },
+                {
+                    "nombre_variable_motor": "N_bucket_refinanciado",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "11"
+                },
+                {
+                    "nombre_variable_motor": "N_bucket_missing",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "-1"
+                },
+                {
+                    "nombre_variable_motor": "N_periodicidad_cuota",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "30"
+                },
+                {
+                    "nombre_variable_motor": "N_max_stress",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "0"
+                },
+                {
+                    "nombre_variable_motor": "T_cod_mon_nacional",
+                    "nombre_campo": null,
+                    "tipo_campo": 2,
+                    "valor_motor": "0001"
+                },
+                {
+                    "nombre_variable_motor": "T_cod_mon_extranjera",
+                    "nombre_campo": null,
+                    "tipo_campo": 2,
+                    "valor_motor": "0010"
+                },
+                {
+                    "nombre_variable_motor": "N_max_madurez",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "0"
+                },
+                {
+                    "nombre_variable_motor": "N_bucket_otros_missing",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "0"
+                },
+                {
+                    "nombre_variable_motor": "N_ccf",
+                    "nombre_campo": null,
+                    "tipo_campo": 4,
+                    "valor_motor": "0.0"
+                },
+                {
+                    "nombre_variable_motor": "N_bucket_cancelado",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "13"
+                },
+                {
+                    "nombre_variable_motor": "N_fecha_fin_pd",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "201701"
+                },
+                {
+                    "nombre_variable_motor": "N_fecha_inicio_pd",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "201601"
+                },
+                {
+                    "nombre_variable_motor": "N_anios_madurez",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "5"
+                },
+                {
+                    "nombre_variable_motor": "N_bucket_reprogramado",
+                    "nombre_campo": null,
+                    "tipo_campo": 1,
+                    "valor_motor": "10"
+                }
+            ],
+            "nombre_tabla_fichero": null,
+            "campos_string": null,
+            "campos_ancho": null,
+            "cont_campos_string": null,
+            "listaCargas": null
+        },
+        {
+            "nombre_variable_motor": "Tbl_refinanciados",
+            "nombre_bloque": "V_18_BP_REFINANCIADOS_PN",
+            "filtro": " UPPER ( SEGMENTO_IFRS ) = 'TARJETA'",
+            "keep_campos": [
+                "CONCATENADO",
+                "CONCATENADO_ANTERIOR",
+                "CODMES"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_refi_concatenado",
+                    "nombre_campo": "CONCATENADO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_refi_concatenado_ant",
+                    "nombre_campo": "CONCATENADO_ANTERIOR",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_refi_codmes",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_18_BP_REFINANCIADOS_PN_V1",
+            "campos_string": "SEGMENTO_IFRS*CONCATENADO_ANTERIOR*CONCATENADO",
+            "campos_ancho": "11*20*20",
+            "cont_campos_string": 3,
+            "listaCargas": "7651"
+        },
+        {
+            "nombre_variable_motor": "Tbl_judicial",
+            "nombre_bloque": "V_27_BP_JUDICIAL_PN",
+            "filtro": " SEGMENTO_IFRS = 'TARJETA'",
+            "keep_campos": [
+                "CONCATENADO",
+                "CONCATENADO_ANTERIOR",
+                "FECHA_INGRESO"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_jud_concatenado",
+                    "nombre_campo": "CONCATENADO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_jud_concatenado_ant",
+                    "nombre_campo": "CONCATENADO_ANTERIOR",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_jud_codmes",
+                    "nombre_campo": "FECHA_INGRESO",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_27_BP_JUDICIAL_PN_V1",
+            "campos_string": "SEGMENTO_IFRS*CONCATENADO*CONCATENADO_ANTERIOR",
+            "campos_ancho": "11*20*20",
+            "cont_campos_string": 3,
+            "listaCargas": "7646"
+        },
+        {
+            "nombre_variable_motor": "Tbl_bucket_limites",
+            "nombre_bloque": "V_LIMITES_BUCKETS",
+            "filtro": "",
+            "keep_campos": [
+                "cartera",
+                "segmento",
+                "lim_inferior",
+                "lim_superior",
+                "bucket_score"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_bucket_lim_cartera",
+                    "nombre_campo": "cartera",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_bucket_lim_segmento",
+                    "nombre_campo": "segmento",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_bucket_lim_inf",
+                    "nombre_campo": "lim_inferior",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_bucket_lim_sup",
+                    "nombre_campo": "lim_superior",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_bucket_lim_bucket",
+                    "nombre_campo": "bucket_score",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_LIMITES_BUCKETS_V1",
+            "campos_string": "cartera*segmento",
+            "campos_ancho": "21*25",
+            "cont_campos_string": 2,
+            "listaCargas": "6734"
+        },
+        {
+            "nombre_variable_motor": "Tbl_rcd",
+            "nombre_bloque": "V_46_BASE_RCD_PN",
+            "filtro": " SEGMENTO_IFRS = 'TARJETA'",
+            "keep_campos": [
+                "CODMES",
+                "CODUNICOCLI",
+                "CODOPERACION",
+                "CODIGO_PRODUCTO",
+                "CODIGO_SUB_PRODUCTO",
+                "IM_SAL_EQVL",
+                "DIAS_VENCIDO_SIN_CONGELAR",
+                "CODIGO_APLICATIVO",
+                "CODIGO_MONEDA",
+                "CODCUENTACONTABLE",
+                "TIPO_CREDITO",
+                "SEGMENTO_NOTAS"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_segmento",
+                    "nombre_campo": "",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_codmes",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_id_clie",
+                    "nombre_campo": "CODUNICOCLI",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_nu_docu",
+                    "nombre_campo": "CODOPERACION",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_cod_prod",
+                    "nombre_campo": "CODIGO_PRODUCTO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_cod_sub_prod",
+                    "nombre_campo": "CODIGO_SUB_PRODUCTO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_im_sal_eqvl",
+                    "nombre_campo": "IM_SAL_EQVL",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_nu_dias_vcdo",
+                    "nombre_campo": "DIAS_VENCIDO_SIN_CONGELAR",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_cod_apli",
+                    "nombre_campo": "CODIGO_APLICATIVO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_cod_moneda",
+                    "nombre_campo": "CODIGO_MONEDA",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_nu_cta_contable",
+                    "nombre_campo": "CODCUENTACONTABLE",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_tipo_credito",
+                    "nombre_campo": "TIPO_CREDITO",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_banca2",
+                    "nombre_campo": "SEGMENTO_NOTAS",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_46_BASE_RCD_PN_V1",
+            "campos_string": "SEGMENTO_IFRS*CODUNICOCLI*CODOPERACION*CODIGO_PRODUCTO*CODIGO_SUB_PRODUCTO*CODIGO_APLICATIVO*CODCUENTACONTABLE*CODIGO_MONEDA*SEGMENTO_NOTAS*SEGMENTO_RCD",
+            "campos_ancho": "11*10*10*3*3*2*14*4*11*11",
+            "cont_campos_string": 10,
+            "listaCargas": "7632"
+        },
+        {
+            "nombre_variable_motor": "Tbl_antiguedad",
+            "nombre_bloque": "V_31_TARJETA_ANTIGUEDAD",
+            "filtro": "",
+            "keep_campos": [
+                "CODMES",
+                "CONCATENADO",
+                "ANTIGUEDAD"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_antiguedad_codmes",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_antiguedad_concatenado",
+                    "nombre_campo": "CONCATENADO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_antiguedad_valor",
+                    "nombre_campo": "ANTIGUEDAD",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_31_TARJETA_ANTIGUEDAD_V1",
+            "campos_string": "CONCATENADO",
+            "campos_ancho": "20",
+            "cont_campos_string": 1,
+            "listaCargas": "7639"
+        },
+        {
+            "nombre_variable_motor": "Tbl_lpr_estadocuenta",
+            "nombre_bloque": "V_21_TARJETA_LPR_MAEESTADOCUENTA",
+            "filtro": "",
+            "keep_campos": [
+                "CODMES",
+                "CONCATENADO",
+                "MTOLINEACREDITO",
+                "MTOCREDITODISPONIBLE",
+                "CODIGO_MONEDA"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_lpr_codmes",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_lpr_concatenado",
+                    "nombre_campo": "CONCATENADO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_lpr_monto_linea",
+                    "nombre_campo": "MTOLINEACREDITO",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_lpr_monto_disponible",
+                    "nombre_campo": "MTOCREDITODISPONIBLE",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_lpr_co_moneda",
+                    "nombre_campo": "CODIGO_MONEDA",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_21_TARJETA_LPR_MAEESTADOCUENTA_V1",
+            "campos_string": "CONCATENADO*CODIGO_MONEDA",
+            "campos_ancho": "20*4",
+            "cont_campos_string": 2,
+            "listaCargas": "7647"
+        },
+        {
+            "nombre_variable_motor": "Tbl_ops_activas",
+            "nombre_bloque": "V_22_TARJETA_OPS_ACTIVAS",
+            "filtro": "",
+            "keep_campos": [
+                "CODMES",
+                "CONCATENADO",
+                "FLAG_ACTIVIDAD_6M"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_ops_codmes",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_ops_concatenado",
+                    "nombre_campo": "CONCATENADO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_ops_flag_uso_activa",
+                    "nombre_campo": "FLAG_ACTIVIDAD_6M",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_22_TARJETA_OPS_ACTIVAS_V1",
+            "campos_string": "CONCATENADO",
+            "campos_ancho": "20",
+            "cont_campos_string": 1,
+            "listaCargas": "7638"
+        },
+        {
+            "nombre_variable_motor": "Tbl_cuentas_no_revolventes",
+            "nombre_bloque": "V_CUENTAS_NO_REVOLVENTES",
+            "filtro": "",
+            "keep_campos": [
+                "NU_CTA_CNTB"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_cuentas_no_revolventes",
+                    "nombre_campo": "NU_CTA_CNTB",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_CUENTAS_NO_REVOLVENTES_V1",
+            "campos_string": "NU_CTA_CNTB",
+            "campos_ancho": "14",
+            "cont_campos_string": 1,
+            "listaCargas": "4263"
+        },
+        {
+            "nombre_variable_motor": "Tbl_matriz_mensual",
+            "nombre_bloque": "V_MATRIZ_MENSUAL_TC",
+            "filtro": "",
+            "keep_campos": [
+                "MADUREZ",
+                "Mes_Inicial",
+                "Mes_Final",
+                "N_estado_inicial",
+                "N_bucket",
+                "N_valor_PD"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_matriz_mes_madurez",
+                    "nombre_campo": "MADUREZ",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_matriz_mes_ini",
+                    "nombre_campo": "Mes_Inicial",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_matriz_mes_fin",
+                    "nombre_campo": "Mes_Final",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_matriz_mes_estado_ini",
+                    "nombre_campo": "N_estado_inicial",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_matriz_mes_bucket",
+                    "nombre_campo": "N_bucket",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_matriz_mes_valor_PD",
+                    "nombre_campo": "N_valor_PD",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_MATRIZ_MENSUAL_TC_V1",
+            "campos_string": "Cartera",
+            "campos_ancho": "13",
+            "cont_campos_string": 1,
+            "listaCargas": "6735"
+        },
+        {
+            "nombre_variable_motor": "Tbl_matriz_anual",
+            "nombre_bloque": "V_MATRIZ_ANUAL_TC",
+            "filtro": "",
+            "keep_campos": [
+                "Periodo",
+                "madurez",
+                "N_estado_inicial",
+                "N_bucket",
+                "N_valor_PD"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_matriz_anual_periodo",
+                    "nombre_campo": "Periodo",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_matriz_anual_madurez",
+                    "nombre_campo": "madurez",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_matriz_anual_estado_ini",
+                    "nombre_campo": "N_estado_inicial",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_matriz_anual_bucket",
+                    "nombre_campo": "N_bucket",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_matriz_anual_valor_PD",
+                    "nombre_campo": "N_valor_PD",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_MATRIZ_ANUAL_TC_V1",
+            "campos_string": "Cartera*Periodo",
+            "campos_ancho": "13*11",
+            "cont_campos_string": 2,
+            "listaCargas": "6732"
+        },
+        {
+            "nombre_variable_motor": "Tbl_stress_pd",
+            "nombre_bloque": "V_FWL_IBK",
+            "filtro": " UPPER ( Cartera ) = 'TARJETAS'",
+            "keep_campos": [
+                "Mes",
+                "FACTOR_B",
+                "FACTOR_O",
+                "FACTOR_P",
+                "CODMES"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_stress_pd_mes",
+                    "nombre_campo": "Mes",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_stress_pd_fac_B",
+                    "nombre_campo": "FACTOR_B",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_stress_pd_fac_O",
+                    "nombre_campo": "FACTOR_O",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_stress_pd_fac_P",
+                    "nombre_campo": "FACTOR_P",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_stress_pd_periodo",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_FWL_IBK_V1",
+            "campos_string": "Cartera",
+            "campos_ancho": "13",
+            "cont_campos_string": 1,
+            "listaCargas": "7667"
+        },
+        {
+            "nombre_variable_motor": "Tbl_reactiva",
+            "nombre_bloque": "V_REACTIVA",
+            "filtro": "",
+            "keep_campos": [
+                "CODMES",
+                "CONCATENADO",
+                "COBERTURA",
+                "PROGRAMA"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_reactiva_fecha",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_reactiva_concatenado",
+                    "nombre_campo": "CONCATENADO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_reactiva_cobertura",
+                    "nombre_campo": "COBERTURA",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_reactiva_programa",
+                    "nombre_campo": "PROGRAMA",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_REACTIVA_V2",
+            "campos_string": "CONCATENADO*PROGRAMA",
+            "campos_ancho": "20*18",
+            "cont_campos_string": 2,
+            "listaCargas": "7670"
+        },
+        {
+            "nombre_variable_motor": "Tbl_rcd_PJ",
+            "nombre_bloque": "V_45_BASE_RCD_PJ",
+            "filtro": "",
+            "keep_campos": [
+                "CODMES",
+                "CODUNICOCLI",
+                "CODOPERACION"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_codmes_PJ",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_id_clie_PJ",
+                    "nombre_campo": "CODUNICOCLI",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_rcd_nu_docu_PJ",
+                    "nombre_campo": "CODOPERACION",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_45_BASE_RCD_PJ_V1",
+            "campos_string": "SEGMENTO_IFRS*SEGMENTO_BPE*CODUNICOCLI*CODOPERACION*CODIGO_MONEDA*CODIGO_PRODUCTO*CODIGO_SUB_PRODUCTO*CODIGO_APLICATIVO*CODCUENTACONTABLE*SEGMENTO_NOTAS",
+            "campos_ancho": "13*2*10*10*4*3*3*2*14*9",
+            "cont_campos_string": 10,
+            "listaCargas": "7631"
+        },
+        {
+            "nombre_variable_motor": "Tbl_tipo_cambio",
+            "nombre_bloque": "V_25_TIPO_CAMBIO_HISTORICO",
+            "filtro": "",
+            "keep_campos": [
+                "CODMES",
+                "TIPO_CAMBIO"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_tipo_cambio_periodo",
+                    "nombre_campo": "CODMES",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_tipo_cambio",
+                    "nombre_campo": "TIPO_CAMBIO",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_25_TIPO_CAMBIO_HISTORICO_V1",
+            "campos_string": "",
+            "campos_ancho": "",
+            "cont_campos_string": 0,
+            "listaCargas": "7635"
+        },
+        {
+            "nombre_variable_motor": "Tbl_castigo_operacion",
+            "nombre_bloque": "V_47_TABLA_CASTIGOS",
+            "filtro": "",
+            "keep_campos": [
+                "CONCATENADO",
+                "CONCATENADO_ANTERIOR",
+                "FECHAINGRESO",
+                "FLAG_CALCULO",
+                "MONTOCAPITAL"
+            ],
+            "campos": [
+                {
+                    "nombre_variable_motor": "Tcmp_castigo_concatenado",
+                    "nombre_campo": "CONCATENADO",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_castigo_concatenado_ant",
+                    "nombre_campo": "CONCATENADO_ANTERIOR",
+                    "tipo_campo": 2,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_castigo_fecha_ingreso",
+                    "nombre_campo": "FECHAINGRESO",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_castigo_flag",
+                    "nombre_campo": "FLAG_CALCULO",
+                    "tipo_campo": 1,
+                    "valor_motor": null
+                },
+                {
+                    "nombre_variable_motor": "Tcmp_castigo_monto_capital",
+                    "nombre_campo": "MONTOCAPITAL",
+                    "tipo_campo": 4,
+                    "valor_motor": null
+                }
+            ],
+            "nombre_tabla_fichero": "HOA_47_TABLA_CASTIGOS_V1",
+            "campos_string": "CONCATENADO*CONCATENADO_ANTERIOR*MONEDA",
+            "campos_ancho": "20*20*3",
+            "cont_campos_string": 3,
+            "listaCargas": "7645"
+        }
+    ],
+    "escenarios": [
+        {
+            "nombre_escenario": "Base",
+            "listaOficiales": "32961,32962,32963,32964",
+            "nombre_escenario_motor": "B",
+            "n_peso": 0.58,
+            "n_cod_escenario_version": 5341,
+            "n_cod_ejecucion": 33301,
+            "n_paso_ejecucion": 1,
+            "n_cod_escenario": null
+        },
+        {
+            "nombre_escenario": "Pesimista",
+            "listaOficiales": "32961,32962,32963,32964",
+            "nombre_escenario_motor": "P",
+            "n_peso": 0.35,
+            "n_cod_escenario_version": 5342,
+            "n_cod_ejecucion": 33302,
+            "n_paso_ejecucion": 2,
+            "n_cod_escenario": null
+        },
+        {
+            "nombre_escenario": "Optimista",
+            "listaOficiales": "32961,32962,32963,32964",
+            "nombre_escenario_motor": "O",
+            "n_peso": 0.07,
+            "n_cod_escenario_version": 5343,
+            "n_cod_ejecucion": 33303,
+            "n_paso_ejecucion": 3,
+            "n_cod_escenario": null
+        },
+        {
+            "nombre_escenario": "Normal",
+            "listaOficiales": "32961,32962,32963,32964",
+            "nombre_escenario_motor": "N",
+            "n_peso": 0.0,
+            "n_cod_escenario_version": 5344,
+            "n_cod_ejecucion": 33304,
+            "n_paso_ejecucion": 4,
+            "n_cod_escenario": null
+        }
+    ],
+    "n_cod_juego_escenario": 1841,
+    "n_paso_actual": null,
+    "t_paso_error": null,
+    "n_tipo_obtencion_resultado": 1,
+    "n_vars_staging_adicionales": null,
+    "n_vars_ecl_adicionales": 3,
+    "n_carga_directa": 0,
+    "t_entidad": "IBK",
+    "n_cod_entidad": 1,
+    "t_nombre_cartera_version": "Rec. 23 Tarj. AWS VF4",
+    "t_cartera": "Tarjetas",
+    "n_cod_cartera": 1,
+    "t_agrupacion": "",
+    "n_tipo_ejecucion": 1,
+    "n_FechaCalculo": 20240507,
+    "n_FechaReferencia": 202404,
+    "n_FechaAnterior": 202403,
+    "t_FechaReferencia": "Abr-2024",
+    "t_FechaAnterior": "Mar-2024",
+    "n_cod_cartera_version": 1861,
+    "t_stg_filtro_prelacion": "n_marca_jud = 1|3| '3.002 Judicial'|1; n_marca_def = 1|3| ' 3.001 Default'|2; n_marca_refi = 1|2| '2.004 Refinanciado'|3; n_dias_vencido > 30|2| ' 2.003 Dias de vencido'|4; n_marca_nueva = 1|1| '1.001 Sin Motivo'|5; n_marca_missing_pd = 1|2| '2.002 Missing PD'|6; ( n_pd_ref_stg_pond - n_pd_ori_stg_pond ) >= 0.053 and ( ( n_pd_ref_stg_pond - n_pd_ori_stg_pond ) / n_pd_ori_stg_pond ) >= 0.642|2| '2.001 Incremento significativo de PD'|7;|1| '1.001 Sin Motivo' |8",
+    "t_ecl_reglas_parametros": "n_motivobloqueo in ( '01' , '02' , '04' , '10' , '11' , '13' , '99' ) | n_saldo | 'Bloqueotc'||||||; t_programa in ( 'REACTIVA' , 'CRECER' , 'PRE_HONRAMIENTO' , 'IMPULSO' ) | ( 1 - ( n_cobertura / 100 ) ) * n_ead | 'Reactiva'||||||",
+    "t_ecl_reglas_PE": "",
+    "n_cod_tipo_ejecucion": null
+}
