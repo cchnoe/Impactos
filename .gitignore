@@ -6,6 +6,9 @@
 
 # Ignorar directorios de node_modules
 env_impactos/
+json_s3/
+results/
+raw_txt/
 
 # Ignorar archivos compilados de Java
 *.class
